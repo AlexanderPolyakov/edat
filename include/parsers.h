@@ -61,7 +61,6 @@ struct ParserSuite
     }
 };
 
-edat::Table parseView(std::string_view& view, const ParserSuite& psuite);
 edat::Table parseString(const std::string& input, const ParserSuite& psuite);
 edat::Table parseFile(std::filesystem::path path, const ParserSuite& psuite);
 

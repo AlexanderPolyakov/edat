@@ -12,6 +12,8 @@ namespace edat
 struct ValueStorage
 {
     virtual ~ValueStorage() {}
+
+    virtual ValueStorage* clone() const = 0;
 };
 
 // Do we need classes here? Storing ptr to underlying container might be enough?
@@ -21,6 +23,7 @@ struct TypedStorage : public ValueStorage
     std::vector<T> storage;
 
     virtual ~TypedStorage<T>() {} // just do the automatic stuff
+    ValueStorage* clone() const final;
 };
 
 struct Table
@@ -155,6 +158,39 @@ struct Table
                 c(names[record.nameId], tstorage->storage[record.idx]);
     }
 };
+
+inline edat::Table cloneTable(const edat::Table& tbl)
+{
+    edat::Table res;
+
+    res.names = tbl.names;
+    res.records = tbl.records;
+    res.nameMap = tbl.nameMap;
+    res.typeHashMap = tbl.typeHashMap;
+
+    for (const ValueStorage* s : tbl.storages)
+        res.storages.push_back(s->clone());
+
+    return res;
+}
+
+template<typename T>
+inline ValueStorage* TypedStorage<T>::clone() const
+{
+    TypedStorage<T>* res = new TypedStorage<T>();
+    for (const T& v : storage)
+        res->storage.push_back(v);
+    return res;
+}
+
+template<>
+inline ValueStorage* TypedStorage<Table>::clone() const
+{
+    TypedStorage<Table>* res = new TypedStorage<Table>();
+    for (const Table& v : storage)
+        res->storage.push_back(cloneTable(v));
+    return res;
+}
 
 }
 

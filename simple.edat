@@ -13,3 +13,9 @@ subtable = {
     inner_float:float = "-12231"
     inner_string:str = "Hello darkness my old friend"
 }
+
+inherited_subtable <- subtable = {
+    inner_int:int = "42"
+    new_int:int = "21"
+    new_string:str = "Kill one man, you're the murderer"
+}

@@ -203,15 +203,38 @@ static void reportError(const char* message, const char* lineStart, const std::s
     reportErrorLocation(lineStart, view);
 }
 
+static bool skipCopyOperator(std::string_view& view)
+{
+    std::string_view tview = view;
+    skipWhitespace(tview);
+    if (skipChar(tview, '<') && skipChar(tview, '-'))
+    {
+        skipWhitespace(tview);
+        view = tview;
+        return true;
+    }
+
+    return false;
+}
+
+static std::string_view parseCopyExpression(std::string_view& view)
+{
+    if (!skipCopyOperator(view))
+        return std::string_view{};
+    return parseName(view);
+}
+
 // TODO: better error reporting (custom streams, with cerr as default one)
 // TODO: comments parsing
 // TODO: support unquoted values
 // TODO: check for formatting better
 // TODO: proper return if encountering an error
 // TODO: check for memory leaks
-edat::Table parseView(std::string_view& view, const ParserSuite& psuite)
+edat::Table parseView(std::string_view& view, const ParserSuite& psuite, const edat::Table* cloneFrom = nullptr)
 {
     edat::Table res;
+    if (cloneFrom)
+        res = cloneTable(*cloneFrom);
     const char* lineStart = view.data();
     while (view.size() > 0)
     {
@@ -258,6 +281,16 @@ edat::Table parseView(std::string_view& view, const ParserSuite& psuite)
         }
         else
         {
+            std::string_view copyFrom = parseCopyExpression(view);
+            edat::Table subTable;
+            if (!copyFrom.empty())
+            {
+                res.get<Table>(copyFrom, [&](const edat::Table& tbl)
+                {
+                    subTable = cloneTable(tbl);
+                });
+                skipWhitespace(view);
+            }
             if (!skipAssignmentOp(view))
             {
                 reportError("wrong format for table", lineStart, view);
@@ -272,8 +305,8 @@ edat::Table parseView(std::string_view& view, const ParserSuite& psuite)
                 reportError("wrong format for table", lineStart, view);
                 return res;
             }
-            edat::Table subTable = parseView(view, psuite);
-            res.set<edat::Table>(name, std::move(subTable));
+            edat::Table resSubTable = parseView(view, psuite, &subTable);
+            res.set<edat::Table>(name, std::move(resSubTable));
         }
         skipWhitespace(view);
         if (!skipEndOfAssignment(view))
