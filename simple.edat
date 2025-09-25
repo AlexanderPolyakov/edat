@@ -1,0 +1,15 @@
+something : float = "-2"
+anotherThing:float = "42.123"
+Yet123Another456Thing___:int = "77"
+
+first_thing_on_the_line:str = "Hello"; second_thing_on_the_line:int = "-12"
+
+YetThingAnotherHere:int = "4242"
+
+vector3:float[3] = [ "-12", "22.2", "11" ]
+
+subtable = {
+    inner_int:int = "11"
+    inner_float:float = "-12231"
+    inner_string:str = "Hello darkness my old friend"
+}

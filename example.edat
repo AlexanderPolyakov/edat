@@ -1,0 +1,24 @@
+# This is how it should look like some day
+# currently not everything is supported, so this
+# file is mostly used as a reference for adding
+# new features like unquoted values, comments,
+# tables
+
+something : float = -2
+anotherThing:float = 42.123
+Yet123Another456Thing___:int = 77
+SomeQuotedNumber:float = "-4.768"
+
+first_thing_on_the_line:str = "Hello"; second_thing_on_the_line:int = "-12"
+       # Comment placed randomly
+string_without_quotes:str =     World
+something_with_a_comment:str = "Adding a quotes, otherwise it's not trivial?" # Here's a comment
+
+# Rest of the things we should consider uncommenting as soon as we develop them:
+# dynamically_sized_array:int[] = [1, 2, 3, 55, 66]
+# fixed_array:float[3] = [ -78.2, 890.1, 66 ] # just a 3d vector, yay!
+# table = {
+#   inner_int:int = 11
+#   inner_float:float = -123.123
+#   inner_string:str = hello darkness my old friend
+# }
