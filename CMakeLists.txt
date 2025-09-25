@@ -11,6 +11,6 @@ include_directories(include)
 add_subdirectory(samples)
 add_subdirectory(src edat)
 
-add_library(edat INTERFACE)
-target_include_directories(edat INTERFACE include)
+#add_library(edat)
+target_include_directories(edat PUBLIC include)
 
