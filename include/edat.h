@@ -30,9 +30,9 @@ struct Table
 {
     struct TableRecord
     {
-        size_t nameId = -1;
-        size_t storageId = -1;
-        size_t idx = -1;
+        size_t nameId = size_t(-1);
+        size_t storageId = size_t(-1);
+        size_t idx = size_t(-1);
     };
 
     // TODO: think about how to remove duplicate names here as we have the same name in `names` and `nameMap` (for quick lookup)

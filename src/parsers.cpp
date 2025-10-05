@@ -26,7 +26,7 @@ static bool skipWhitespace(std::string_view& input)
 static bool skipLineBreak(std::string_view& input)
 {
     bool skipped = false;
-    while (isLineBreak(input[0]))
+    while (!input.empty() && isLineBreak(input[0]))
     {
         input.remove_prefix(1);
         skipped = true;
@@ -57,7 +57,7 @@ static std::string_view parseName(std::string_view& input)
 
 static bool skipChar(std::string_view& input, char ch)
 {
-    if (input[0] == ch)
+    if (!input.empty() && input[0] == ch)
     {
         input.remove_prefix(1);
         return true;
@@ -331,7 +331,7 @@ edat::Table parseString(const std::string& input, const ParserSuite& psuite)
 edat::Table parseFile(std::filesystem::path path, const ParserSuite& psuite)
 {
     size_t fsize = std::filesystem::file_size(path);
-    FILE* f = fopen(path.c_str(), "rb");
+    FILE* f = fopen(path.string().c_str(), "rb");
     std::string fileBuffer; fileBuffer.resize(fsize);
     fread(fileBuffer.data(), 1, fsize, f);
     fclose(f);
