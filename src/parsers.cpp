@@ -81,7 +81,10 @@ static int parseArraySpecifier(std::string_view& input)
         return -1;
     std::string_view sizeSpec = parseWhile(input, [](char ch) { return std::isdigit(ch); });
     if (sizeSpec.empty())
+    {
+        skipArrayEnd(input);
         return 0; // dynamic array
+    }
     skipArrayEnd(input);
     return std::stoi(std::string(sizeSpec));
 }
