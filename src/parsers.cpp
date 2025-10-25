@@ -17,7 +17,7 @@ static bool isLineBreak(char ch)
 static bool skipWhitespace(std::string_view& input)
 {
     size_t len = 0;
-    while (isWhitespace(input[len]))
+    while (input.size() > len && isWhitespace(input[len]))
         len++;
     input.remove_prefix(len);
     return len > 0;
@@ -126,7 +126,7 @@ static bool skipEndOfAssignment(std::string_view& input)
 
 static bool skipEndOfLine(std::string_view& input)
 {
-    return skipLineBreak(input) || input.empty();
+    return input.empty() || skipLineBreak(input);
 }
 
 static void select_fg_color(uint8_t color)
