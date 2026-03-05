@@ -23,7 +23,7 @@ struct TypedStorage : public ValueStorage
 {
     std::vector<T> storage;
 
-    virtual ~TypedStorage<T>() {} // just do the automatic stuff
+    virtual ~TypedStorage() {} // just do the automatic stuff
     ValueStorage* clone() const final;
 };
 
